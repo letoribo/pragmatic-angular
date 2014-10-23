@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/dot-luv/jquery-ui.css" type="text/css" />
+<script src="https://code.angularjs.org/1.3.0-beta.1/angular.min.js"></script>
+<script src="http://cdn.rawgit.com/lgersman/pragmatic-angular/e6a1ce1de836ac935e3bfad4ae4290ca128a6db6/pragmatic-angular.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+<style type="text/css">
+pre {border: 1px solid #999; background-color: #9DB3BF; word-wrap: break-word;text-align: center}
+</style>
+</head>
+<body>
+
+<div ng-app="app" ng-controller="main">
+    
+  <div ng-on="{ stop : { handler : onStop} }">
+    <div ng-jquery-plugin="{ slider : { min: 0,	max: 128, value: 60, stop : onStop } }"></div>
+    <pre>slider-value: {{value}}</pre>
+  </div>  
+  
+  <div ng-on="{ change : { handler : onChange} }">
+    <div ng-jquery-plugin="{ slider : { range: true,	min: 0,	max: 128, values: [40, 99], change : onChange } }"></div>
+    <pre>range: {{values}}</pre>
+  </div>
+</div>
+<script>
+
+angular.module('app', ['pragmatic-angular'])
+.controller('main', function($scope) {
+	  
+$scope.value = 60;
+  $scope.onStop = function(event, ui) {
+    $scope.value = ui.value;
+    $scope.$apply();
+  };
+  
+	$scope.values = _.range(40, 100);
+  $scope.onChange = function(event, ui) {
+    var values = function(){ return this };
+    values = _.bind(values, _.range(ui.values[0], ui.values[1]));
+    $scope.values = values();
+    $scope.$apply();
+  };
+
+});
+
+</script>
+</body>
+</html>
